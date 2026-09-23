@@ -1,16 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <meta name="mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-  <meta name="theme-color" content="#1a0533"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#1a0533" />
   <title>🎯 Food Stall Lucky Wheel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet"/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&family=Baloo+2:wght@700;800&display=swap"
+    rel="stylesheet" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     html {
       height: 100%;
@@ -41,11 +50,14 @@
     /* Floating particles */
     .particles {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
       z-index: 0;
     }
+
     .particle {
       position: absolute;
       border-radius: 50%;
@@ -54,10 +66,23 @@
     }
 
     @keyframes float {
-      0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
-      10%  { opacity: 0.2; }
-      90%  { opacity: 0.2; }
-      100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+      0% {
+        transform: translateY(110vh) rotate(0deg);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 0.2;
+      }
+
+      90% {
+        opacity: 0.2;
+      }
+
+      100% {
+        transform: translateY(-10vh) rotate(720deg);
+        opacity: 0;
+      }
     }
 
     /* Header */
@@ -68,21 +93,24 @@
       margin-bottom: clamp(8px, 2vh, 18px);
       padding: 0 16px;
     }
+
     .header h1 {
       font-family: 'Baloo 2', cursive;
       font-size: clamp(1.4rem, 5vw, 2.8rem);
       font-weight: 800;
       color: #fff;
-      text-shadow: 0 0 30px rgba(255,200,0,0.7), 0 2px 8px rgba(0,0,0,0.5);
+      text-shadow: 0 0 30px rgba(255, 200, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.5);
       letter-spacing: 1px;
       line-height: 1.2;
     }
+
     .header p {
       color: #d4b8ff;
       font-size: clamp(0.75rem, 2.5vw, 1rem);
       margin-top: 4px;
       font-weight: 600;
     }
+
     .badge {
       display: inline-block;
       background: linear-gradient(90deg, #ff6b35, #f7c59f);
@@ -122,9 +150,10 @@
       border-left: 18px solid transparent;
       border-right: 18px solid transparent;
       border-top: 50px solid #ffd700;
-      filter: drop-shadow(0 4px 10px rgba(255,215,0,0.8));
+      filter: drop-shadow(0 4px 10px rgba(255, 215, 0, 0.8));
       z-index: 10;
     }
+
     .pointer::after {
       content: '';
       position: absolute;
@@ -134,16 +163,16 @@
       height: 20px;
       background: #fff;
       border-radius: 50%;
-      box-shadow: 0 0 10px rgba(255,215,0,0.8);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
     }
 
     canvas#wheelCanvas {
       border-radius: 50%;
       box-shadow:
-        0 0 0 8px rgba(255,255,255,0.15),
-        0 0 0 12px rgba(255,215,0,0.3),
-        0 0 60px rgba(180,100,255,0.4),
-        0 10px 40px rgba(0,0,0,0.6);
+        0 0 0 8px rgba(255, 255, 255, 0.15),
+        0 0 0 12px rgba(255, 215, 0, 0.3),
+        0 0 60px rgba(180, 100, 255, 0.4),
+        0 10px 40px rgba(0, 0, 0, 0.6);
       display: block;
       cursor: pointer;
       transition: transform 0.1s;
@@ -153,6 +182,7 @@
       user-select: none;
       -webkit-user-select: none;
     }
+
     canvas#wheelCanvas:hover {
       transform: scale(1.01);
     }
@@ -160,14 +190,15 @@
     /* Center hub */
     .hub {
       position: absolute;
-      top: 50%; left: 50%;
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%);
       width: 60px;
       height: 60px;
       background: radial-gradient(circle, #fff 30%, #ffd700 70%, #ff8c00 100%);
       border-radius: 50%;
       border: 4px solid #fff;
-      box-shadow: 0 0 20px rgba(255,215,0,0.9), 0 0 40px rgba(255,140,0,0.5);
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.9), 0 0 40px rgba(255, 140, 0, 0.5);
       z-index: 5;
       display: flex;
       align-items: center;
@@ -187,7 +218,7 @@
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 6px 25px rgba(255,165,0,0.6), 0 0 0 4px rgba(255,215,0,0.2);
+      box-shadow: 0 6px 25px rgba(255, 165, 0, 0.6), 0 0 0 4px rgba(255, 215, 0, 0.2);
       transition: all 0.2s;
       letter-spacing: 1px;
       position: relative;
@@ -198,18 +229,24 @@
       /* Ensure good tap target */
       min-height: 52px;
     }
+
     .spin-btn::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 60%);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, transparent 60%);
       border-radius: 50px;
     }
+
     .spin-btn:hover:not(:disabled) {
       transform: translateY(-3px) scale(1.04);
-      box-shadow: 0 10px 35px rgba(255,165,0,0.8), 0 0 0 6px rgba(255,215,0,0.3);
+      box-shadow: 0 10px 35px rgba(255, 165, 0, 0.8), 0 0 0 6px rgba(255, 215, 0, 0.3);
     }
-    .spin-btn:active:not(:disabled) { transform: scale(0.98); }
+
+    .spin-btn:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
     .spin-btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
@@ -221,47 +258,70 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.75);
+      background: rgba(0, 0, 0, 0.75);
       z-index: 100;
       align-items: center;
       justify-content: center;
       backdrop-filter: blur(6px);
     }
-    .result-overlay.show { display: flex; }
+
+    .result-overlay.show {
+      display: flex;
+    }
 
     .result-card {
       background: linear-gradient(145deg, #1e0545, #0d2558);
-      border: 2px solid rgba(255,215,0,0.4);
+      border: 2px solid rgba(255, 215, 0, 0.4);
       border-radius: 28px;
       padding: clamp(24px, 5vw, 40px) clamp(20px, 6vw, 50px);
       text-align: center;
-      box-shadow: 0 20px 80px rgba(0,0,0,0.7), 0 0 60px rgba(180,80,255,0.3);
+      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.7), 0 0 60px rgba(180, 80, 255, 0.3);
       animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       max-width: 420px;
       width: 92%;
       /* Respect bottom safe area inside modal */
       margin-bottom: env(safe-area-inset-bottom, 0px);
     }
+
     @keyframes popIn {
-      from { transform: scale(0.5) rotate(-10deg); opacity: 0; }
-      to   { transform: scale(1) rotate(0deg); opacity: 1; }
+      from {
+        transform: scale(0.5) rotate(-10deg);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
     }
 
-    .result-emoji { font-size: clamp(3rem, 10vw, 5rem); margin-bottom: 10px; }
+    .result-emoji {
+      font-size: clamp(3rem, 10vw, 5rem);
+      margin-bottom: 10px;
+    }
+
     .result-title {
       font-family: 'Baloo 2', cursive;
       font-size: clamp(1.4rem, 5vw, 2rem);
       font-weight: 800;
       margin-bottom: 8px;
     }
+
     .result-msg {
       font-size: clamp(0.85rem, 3vw, 1rem);
       color: #c8a8ff;
       margin-bottom: 24px;
       line-height: 1.5;
     }
-    .result-win .result-title { color: #ffd700; text-shadow: 0 0 20px rgba(255,215,0,0.7); }
-    .result-lose .result-title { color: #ff6b6b; }
+
+    .result-win .result-title {
+      color: #ffd700;
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+    }
+
+    .result-lose .result-title {
+      color: #ff6b6b;
+    }
 
     .close-btn {
       padding: 14px 36px;
@@ -273,14 +333,18 @@
       border: none;
       border-radius: 30px;
       cursor: pointer;
-      box-shadow: 0 4px 20px rgba(168,85,247,0.5);
+      box-shadow: 0 4px 20px rgba(168, 85, 247, 0.5);
       transition: all 0.2s;
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
       min-height: 50px;
       width: 100%;
     }
-    .close-btn:hover { transform: scale(1.05); box-shadow: 0 6px 25px rgba(168,85,247,0.7); }
+
+    .close-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 25px rgba(168, 85, 247, 0.7);
+    }
 
     /* Confetti */
     .confetti-piece {
@@ -293,8 +357,12 @@
       z-index: 200;
       pointer-events: none;
     }
+
     @keyframes confettiFall {
-      to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+      to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+      }
     }
 
     /* Stats */
@@ -308,9 +376,10 @@
       justify-content: center;
       padding: 0 12px;
     }
+
     .stat-box {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 14px;
       padding: clamp(8px, 2vw, 10px) clamp(14px, 4vw, 22px);
       text-align: center;
@@ -319,12 +388,14 @@
       flex: 1;
       min-width: 80px;
     }
+
     .stat-num {
       font-family: 'Baloo 2', cursive;
       font-size: clamp(1.2rem, 4vw, 1.6rem);
       font-weight: 800;
       color: #ffd700;
     }
+
     .stat-label {
       font-size: clamp(0.6rem, 1.8vw, 0.7rem);
       color: #b49ee0;
@@ -335,347 +406,372 @@
     /* ── Responsive breakpoints ── */
     /* Small phones (< 380px) */
     @media (max-width: 380px) {
-      .header { margin-bottom: 6px; }
-      .hub { width: 46px; height: 46px; font-size: 1.1rem; }
+      .header {
+        margin-bottom: 6px;
+      }
+
+      .hub {
+        width: 46px;
+        height: 46px;
+        font-size: 1.1rem;
+      }
     }
 
     /* Standard mobile (< 480px) */
     @media (max-width: 480px) {
-      .result-card { padding: 22px 18px; }
-      .stats { gap: 8px; }
+      .result-card {
+        padding: 22px 18px;
+      }
+
+      .stats {
+        gap: 8px;
+      }
     }
 
     /* Landscape mobile */
     @media (max-height: 500px) and (orientation: landscape) {
-      .header { margin-bottom: 4px; }
-      .header p { display: none; }
-      .stats { margin-top: 8px; }
-      .spin-btn { margin-top: 10px; }
+      .header {
+        margin-bottom: 4px;
+      }
+
+      .header p {
+        display: none;
+      }
+
+      .stats {
+        margin-top: 8px;
+      }
+
+      .spin-btn {
+        margin-top: 10px;
+      }
     }
   </style>
 </head>
+
 <body>
 
-<!-- Particles -->
-<div class="particles" id="particles"></div>
+  <!-- Particles -->
+  <div class="particles" id="particles"></div>
 
-<!-- Header -->
-<div class="header">
-  <h1>🎯 Lucky Spin Wheel</h1>
-  <p>Food Stall Competition — Try Your Luck!</p>
-  <span class="badge">🍹 Guaranteed 1 Free Sharbat every 8 Spins!</span>
-</div>
-
-<!-- Wheel -->
-<div class="wheel-area">
-  <div class="wheel-wrapper">
-    <div class="pointer"></div>
-    <canvas id="wheelCanvas"></canvas>
-    <div class="hub">🎯</div>
+  <!-- Header -->
+  <div class="header">
+    <h1>🎯 Lucky Spin Wheel</h1>
+    <p>Food Stall Competition — Try Your Luck!</p>
+    <span class="badge">🍹 Guaranteed 1 Free Sharbat every 8 Spins!</span>
   </div>
 
-  <button class="spin-btn" id="spinBtn" onclick="spin()">🎰 SPIN!</button>
+  <!-- Wheel -->
+  <div class="wheel-area">
+    <div class="wheel-wrapper">
+      <div class="pointer"></div>
+      <canvas id="wheelCanvas"></canvas>
+      <div class="hub">🎯</div>
+    </div>
 
-  <!-- Stats -->
-  <div class="stats">
-    <div class="stat-box">
-      <div class="stat-num" id="totalSpins">0</div>
-      <div class="stat-label">Total Spins</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num" id="totalWins">0</div>
-      <div class="stat-label">🍹 Won</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num" id="totalLoss">0</div>
-      <div class="stat-label">😔 Nothing</div>
+    <button class="spin-btn" id="spinBtn" onclick="spin()">🎰 SPIN!</button>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat-box">
+        <div class="stat-num" id="totalSpins">0</div>
+        <div class="stat-label">Total Spins</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="totalWins">0</div>
+        <div class="stat-label">🍹 Won</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="totalLoss">0</div>
+        <div class="stat-label">😔 Nothing</div>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Result Overlay -->
-<div class="result-overlay" id="resultOverlay">
-  <div class="result-card" id="resultCard">
-    <div class="result-emoji" id="resultEmoji"></div>
-    <div class="result-title" id="resultTitle"></div>
-    <div class="result-msg" id="resultMsg"></div>
-    <button class="close-btn" onclick="closeResult()">🔄 Spin Again</button>
+  <!-- Result Overlay -->
+  <div class="result-overlay" id="resultOverlay">
+    <div class="result-card" id="resultCard">
+      <div class="result-emoji" id="resultEmoji"></div>
+      <div class="result-title" id="resultTitle"></div>
+      <div class="result-msg" id="resultMsg"></div>
+      <button class="close-btn" onclick="closeResult()">🔄 Spin Again</button>
+    </div>
   </div>
-</div>
 
-<script>
-  // Wheel Config
-  const SEGMENTS = [
-    { label: "Nothing",      color: "#3b1f6e", textColor: "#c8a8ff" },
-    { label: "Free\nSharbat!", color: "#ff6b35", textColor: "#fff"   },
-    { label: "Nothing",      color: "#2d1060", textColor: "#c8a8ff" },
-    { label: "Nothing",      color: "#3b1f6e", textColor: "#c8a8ff" },
-    { label: "Nothing",      color: "#2d1060", textColor: "#c8a8ff" },
-    { label: "Nothing",      color: "#3b1f6e", textColor: "#c8a8ff" },
-    { label: "Nothing",      color: "#2d1060", textColor: "#c8a8ff" },
-    { label: "Nothing",      color: "#3b1f6e", textColor: "#c8a8ff" },
-  ];
+  <script>
+    // Wheel Config
+    const SEGMENTS = [
+      { label: "Nothing", color: "#3b1f6e", textColor: "#c8a8ff" },
+      { label: "Free\nSharbat!", color: "#ff6b35", textColor: "#fff" },
+      { label: "Nothing", color: "#2d1060", textColor: "#c8a8ff" },
+      { label: "Free\nSharbat!", color: "#ff6b35", textColor: "#fff" },
+      { label: "Nothing", color: "#2d1060", textColor: "#c8a8ff" },
+      { label: "Free\nSharbat!", color: "#ff6b35", textColor: "#fff" },
+      { label: "Nothing", color: "#2d1060", textColor: "#c8a8ff" },
+      { label: "Nothing", color: "#3b1f6e", textColor: "#c8a8ff" },
+    ];
 
-  const NUM = SEGMENTS.length;
-  const ARC = (2 * Math.PI) / NUM;
+    const NUM = SEGMENTS.length;
+    const ARC = (2 * Math.PI) / NUM;
 
-  const canvas = document.getElementById('wheelCanvas');
-  const ctx    = canvas.getContext('2d');
+    const canvas = document.getElementById('wheelCanvas');
+    const ctx = canvas.getContext('2d');
 
-  let size;
-  let currentAngle = 0;
-  let spinning = false;
-  let totalSpins = 0, totalWins = 0, totalLoss = 0;
+    let size;
+    let currentAngle = 0;
+    let spinning = false;
+    let totalSpins = 0, totalWins = 0, totalLoss = 0;
 
-  // ── Guaranteed deck: exactly 1 win per 8 spins ──────────────────────────────
-  // Deck = [true, false, false, false, false, false, false, false] shuffled
-  let deck = [];
-  function buildDeck() {
-    deck = [true, false, false, false, false, false, false, false];
-    // Fisher-Yates shuffle
-    for (let i = deck.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [deck[i], deck[j]] = [deck[j], deck[i]];
+    // ── Guaranteed deck: exactly 1 win per 8 spins ──────────────────────────────
+    // Deck = [true, false, false, false, false, false, false, false] shuffled
+    let deck = [];
+    function buildDeck() {
+      deck = [true, false, false, false, false, false, false, false];
+      // Fisher-Yates shuffle
+      for (let i = deck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [deck[i], deck[j]] = [deck[j], deck[i]];
+      }
     }
-  }
-  buildDeck(); // initialise on load
+    buildDeck(); // initialise on load
 
-  function drawFromDeck() {
-    if (deck.length === 0) buildDeck(); // reset every 8 spins
-    return deck.pop();
-  }
+    function drawFromDeck() {
+      if (deck.length === 0) buildDeck(); // reset every 8 spins
+      return deck.pop();
+    }
 
-  function resize() {
-    const maxSize = Math.min(window.innerWidth * 0.78, 500);
-    size = Math.max(300, maxSize);
-    canvas.width = canvas.height = size;
-    drawWheel(currentAngle);
-  }
-  window.addEventListener('resize', resize);
+    function resize() {
+      const maxSize = Math.min(window.innerWidth * 0.78, 500);
+      size = Math.max(300, maxSize);
+      canvas.width = canvas.height = size;
+      drawWheel(currentAngle);
+    }
+    window.addEventListener('resize', resize);
 
-  function drawWheel(angle) {
-    const cx = size / 2, cy = size / 2, r = size / 2 - 6;
-    ctx.clearRect(0, 0, size, size);
+    function drawWheel(angle) {
+      const cx = size / 2, cy = size / 2, r = size / 2 - 6;
+      ctx.clearRect(0, 0, size, size);
 
-    const glow = ctx.createRadialGradient(cx, cy, r * 0.85, cx, cy, r);
-    glow.addColorStop(0, 'rgba(255,215,0,0)');
-    glow.addColorStop(1, 'rgba(255,215,0,0.15)');
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-    ctx.fillStyle = glow;
-    ctx.fill();
-
-    SEGMENTS.forEach((seg, i) => {
-      const startAngle = angle + i * ARC;
-      const endAngle   = startAngle + ARC;
-      const midAngle   = startAngle + ARC / 2;
-
+      const glow = ctx.createRadialGradient(cx, cy, r * 0.85, cx, cy, r);
+      glow.addColorStop(0, 'rgba(255,215,0,0)');
+      glow.addColorStop(1, 'rgba(255,215,0,0.15)');
       ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.arc(cx, cy, r, startAngle, endAngle);
-      ctx.closePath();
-      ctx.fillStyle = seg.color;
+      ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+      ctx.fillStyle = glow;
       ctx.fill();
 
-      if (seg.label.includes('Sharbat')) {
-        const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
-        grad.addColorStop(0, 'rgba(255,200,100,0.35)');
-        grad.addColorStop(1, 'rgba(255,100,30,0.1)');
+      SEGMENTS.forEach((seg, i) => {
+        const startAngle = angle + i * ARC;
+        const endAngle = startAngle + ARC;
+        const midAngle = startAngle + ARC / 2;
+
         ctx.beginPath();
         ctx.moveTo(cx, cy);
         ctx.arc(cx, cy, r, startAngle, endAngle);
         ctx.closePath();
-        ctx.fillStyle = grad;
+        ctx.fillStyle = seg.color;
         ctx.fill();
-      }
 
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.arc(cx, cy, r, startAngle, endAngle);
-      ctx.closePath();
-      ctx.strokeStyle = 'rgba(255,255,255,0.12)';
-      ctx.lineWidth = 2;
-      ctx.stroke();
+        if (seg.label.includes('Sharbat')) {
+          const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+          grad.addColorStop(0, 'rgba(255,200,100,0.35)');
+          grad.addColorStop(1, 'rgba(255,100,30,0.1)');
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.arc(cx, cy, r, startAngle, endAngle);
+          ctx.closePath();
+          ctx.fillStyle = grad;
+          ctx.fill();
+        }
 
-      if (seg.label.includes('Sharbat')) {
-        const iconR = r * 0.82;
-        const ix = cx + iconR * Math.cos(midAngle);
-        const iy = cy + iconR * Math.sin(midAngle);
-        ctx.font = size * 0.055 + 'px serif';
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, startAngle, endAngle);
+        ctx.closePath();
+        ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        if (seg.label.includes('Sharbat')) {
+          const iconR = r * 0.82;
+          const ix = cx + iconR * Math.cos(midAngle);
+          const iy = cy + iconR * Math.sin(midAngle);
+          ctx.font = size * 0.055 + 'px serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('🍹', ix, iy);
+        }
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(midAngle);
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('🍹', ix, iy);
-      }
 
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(midAngle);
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
+        const lines = seg.label.split('\n');
+        const fontSize = seg.label.includes('Sharbat')
+          ? Math.max(13, size * 0.038)
+          : Math.max(12, size * 0.034);
 
-      const lines = seg.label.split('\n');
-      const fontSize = seg.label.includes('Sharbat')
-        ? Math.max(13, size * 0.038)
-        : Math.max(12, size * 0.034);
+        ctx.font = 'bold ' + fontSize + 'px Poppins, sans-serif';
+        ctx.fillStyle = seg.textColor;
+        ctx.shadowColor = 'rgba(0,0,0,0.6)';
+        ctx.shadowBlur = 4;
 
-      ctx.font = 'bold ' + fontSize + 'px Poppins, sans-serif';
-      ctx.fillStyle = seg.textColor;
-      ctx.shadowColor = 'rgba(0,0,0,0.6)';
-      ctx.shadowBlur = 4;
+        const textR = r * 0.58;
+        lines.forEach((line, li) => {
+          const lineOffset = (li - (lines.length - 1) / 2) * (fontSize + 3);
+          ctx.fillText(line, textR, lineOffset);
+        });
 
-      const textR = r * 0.58;
-      lines.forEach((line, li) => {
-        const lineOffset = (li - (lines.length - 1) / 2) * (fontSize + 3);
-        ctx.fillText(line, textR, lineOffset);
+        ctx.restore();
       });
 
-      ctx.restore();
-    });
-
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-    ctx.strokeStyle = 'rgba(255,215,0,0.5)';
-    ctx.lineWidth = 4;
-    ctx.stroke();
-  }
-
-  function spin() {
-    if (spinning) return;
-    spinning = true;
-    document.getElementById('spinBtn').disabled = true;
-
-    // Draw guaranteed result from shuffled deck
-    const isWin = drawFromDeck();
-
-    let targetIndex;
-    if (isWin) {
-      targetIndex = 1; // the single Sharbat segment
-    } else {
-      const nothingIndices = [0, 2, 3, 4, 5, 6, 7];
-      targetIndex = nothingIndices[Math.floor(Math.random() * nothingIndices.length)];
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+      ctx.strokeStyle = 'rgba(255,215,0,0.5)';
+      ctx.lineWidth = 4;
+      ctx.stroke();
     }
 
-    const targetMid = (targetIndex + 0.5) * ARC;
-    const pointer   = -Math.PI / 2;
-    const jitter = (Math.random() - 0.5) * ARC * 0.6;
-    const needed = ((pointer - currentAngle - targetMid - jitter) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
-    const extraSpins = (6 + Math.floor(Math.random() * 4)) * 2 * Math.PI;
-    const totalRotation = extraSpins + needed;
+    function spin() {
+      if (spinning) return;
+      spinning = true;
+      document.getElementById('spinBtn').disabled = true;
 
-    const duration = 5000 + Math.random() * 1500;
-    const startTime = performance.now();
-    const startAngle = currentAngle;
+      // Draw guaranteed result from shuffled deck
+      const isWin = drawFromDeck();
 
-    function easeOut(t) {
-      return 1 - Math.pow(1 - t, 4);
-    }
-
-    function animate(now) {
-      const elapsed = now - startTime;
-      const t = Math.min(elapsed / duration, 1);
-      currentAngle = startAngle + easeOut(t) * totalRotation;
-      drawWheel(currentAngle);
-
-      if (t < 1) {
-        requestAnimationFrame(animate);
+      let targetIndex;
+      if (isWin) {
+        targetIndex = 1; // the single Sharbat segment
       } else {
-        currentAngle = startAngle + totalRotation;
+        const nothingIndices = [0, 2, 3, 4, 5, 6, 7];
+        targetIndex = nothingIndices[Math.floor(Math.random() * nothingIndices.length)];
+      }
+
+      const targetMid = (targetIndex + 0.5) * ARC;
+      const pointer = -Math.PI / 2;
+      const jitter = (Math.random() - 0.5) * ARC * 0.6;
+      const needed = ((pointer - currentAngle - targetMid - jitter) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+      const extraSpins = (6 + Math.floor(Math.random() * 4)) * 2 * Math.PI;
+      const totalRotation = extraSpins + needed;
+
+      const duration = 5000 + Math.random() * 1500;
+      const startTime = performance.now();
+      const startAngle = currentAngle;
+
+      function easeOut(t) {
+        return 1 - Math.pow(1 - t, 4);
+      }
+
+      function animate(now) {
+        const elapsed = now - startTime;
+        const t = Math.min(elapsed / duration, 1);
+        currentAngle = startAngle + easeOut(t) * totalRotation;
         drawWheel(currentAngle);
-        spinning = false;
-        document.getElementById('spinBtn').disabled = false;
-        totalSpins++;
-        showResult(isWin);
+
+        if (t < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          currentAngle = startAngle + totalRotation;
+          drawWheel(currentAngle);
+          spinning = false;
+          document.getElementById('spinBtn').disabled = false;
+          totalSpins++;
+          showResult(isWin);
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    function showResult(isWin) {
+      const overlay = document.getElementById('resultOverlay');
+      const card = document.getElementById('resultCard');
+
+      if (isWin) {
+        totalWins++;
+        document.getElementById('resultEmoji').textContent = '🍹';
+        document.getElementById('resultTitle').textContent = 'Free Sharbat!';
+        document.getElementById('resultMsg').textContent =
+          'Congratulations! You are the lucky winner! Come collect your free refreshing Sharbat!';
+        card.className = 'result-card result-win';
+        launchConfetti();
+      } else {
+        totalLoss++;
+        document.getElementById('resultEmoji').textContent = '😔';
+        document.getElementById('resultTitle').textContent = 'Nothing This Time!';
+        document.getElementById('resultMsg').textContent =
+          'Better luck next time! Maybe the next spin is your lucky one.';
+        card.className = 'result-card result-lose';
+      }
+
+      updateStats();
+      overlay.classList.add('show');
+    }
+
+    function closeResult() {
+      document.getElementById('resultOverlay').classList.remove('show');
+    }
+
+    function updateStats() {
+      document.getElementById('totalSpins').textContent = totalSpins;
+      document.getElementById('totalWins').textContent = totalWins;
+      document.getElementById('totalLoss').textContent = totalLoss;
+    }
+
+    function launchConfetti() {
+      const colors = ['#ffd700', '#ff6b35', '#a855f7', '#22d3ee', '#f43f5e', '#4ade80'];
+      for (let i = 0; i < 80; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        const s = 6 + Math.random() * 10;
+        el.style.left = (Math.random() * 100) + 'vw';
+        el.style.background = colors[Math.floor(Math.random() * colors.length)];
+        el.style.width = s + 'px';
+        el.style.height = s + 'px';
+        el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        el.style.animationDuration = (2 + Math.random() * 3) + 's';
+        el.style.animationDelay = (Math.random() * 0.8) + 's';
+        document.body.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
       }
     }
 
-    requestAnimationFrame(animate);
-  }
+    (function createParticles() {
+      const container = document.getElementById('particles');
+      const colors = ['#a855f7', '#ffd700', '#ff6b35', '#22d3ee'];
+      for (let i = 0; i < 20; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const s = 6 + Math.random() * 20;
+        p.style.width = s + 'px';
+        p.style.height = s + 'px';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.left = (Math.random() * 100) + '%';
+        p.style.animationDuration = (8 + Math.random() * 12) + 's';
+        p.style.animationDelay = (Math.random() * 8) + 's';
+        container.appendChild(p);
+      }
+    })();
 
-  function showResult(isWin) {
-    const overlay = document.getElementById('resultOverlay');
-    const card    = document.getElementById('resultCard');
+    // Touch support: tapping the wheel spins it
+    canvas.addEventListener('touchend', function (e) {
+      e.preventDefault();
+      spin();
+    }, { passive: false });
 
-    if (isWin) {
-      totalWins++;
-      document.getElementById('resultEmoji').textContent = '🍹';
-      document.getElementById('resultTitle').textContent = 'Free Sharbat!';
-      document.getElementById('resultMsg').textContent =
-        'Congratulations! You are the lucky winner! Come collect your free refreshing Sharbat!';
-      card.className = 'result-card result-win';
-      launchConfetti();
-    } else {
-      totalLoss++;
-      document.getElementById('resultEmoji').textContent = '😔';
-      document.getElementById('resultTitle').textContent = 'Nothing This Time!';
-      document.getElementById('resultMsg').textContent =
-        'Better luck next time! Maybe the next spin is your lucky one.';
-      card.className = 'result-card result-lose';
-    }
+    // Also support click on canvas
+    canvas.addEventListener('click', spin);
 
-    updateStats();
-    overlay.classList.add('show');
-  }
+    // Re-draw on orientation change (iOS)
+    window.addEventListener('orientationchange', function () {
+      setTimeout(resize, 300);
+    });
 
-  function closeResult() {
-    document.getElementById('resultOverlay').classList.remove('show');
-  }
-
-  function updateStats() {
-    document.getElementById('totalSpins').textContent = totalSpins;
-    document.getElementById('totalWins').textContent  = totalWins;
-    document.getElementById('totalLoss').textContent  = totalLoss;
-  }
-
-  function launchConfetti() {
-    const colors = ['#ffd700','#ff6b35','#a855f7','#22d3ee','#f43f5e','#4ade80'];
-    for (let i = 0; i < 80; i++) {
-      const el = document.createElement('div');
-      el.className = 'confetti-piece';
-      const s = 6 + Math.random() * 10;
-      el.style.left = (Math.random() * 100) + 'vw';
-      el.style.background = colors[Math.floor(Math.random() * colors.length)];
-      el.style.width = s + 'px';
-      el.style.height = s + 'px';
-      el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-      el.style.animationDuration = (2 + Math.random() * 3) + 's';
-      el.style.animationDelay = (Math.random() * 0.8) + 's';
-      document.body.appendChild(el);
-      el.addEventListener('animationend', () => el.remove());
-    }
-  }
-
-  (function createParticles() {
-    const container = document.getElementById('particles');
-    const colors = ['#a855f7','#ffd700','#ff6b35','#22d3ee'];
-    for (let i = 0; i < 20; i++) {
-      const p = document.createElement('div');
-      p.className = 'particle';
-      const s = 6 + Math.random() * 20;
-      p.style.width = s + 'px';
-      p.style.height = s + 'px';
-      p.style.background = colors[Math.floor(Math.random() * colors.length)];
-      p.style.left = (Math.random() * 100) + '%';
-      p.style.animationDuration = (8 + Math.random() * 12) + 's';
-      p.style.animationDelay = (Math.random() * 8) + 's';
-      container.appendChild(p);
-    }
-  })();
-
-  // Touch support: tapping the wheel spins it
-  canvas.addEventListener('touchend', function(e) {
-    e.preventDefault();
-    spin();
-  }, { passive: false });
-
-  // Also support click on canvas
-  canvas.addEventListener('click', spin);
-
-  // Re-draw on orientation change (iOS)
-  window.addEventListener('orientationchange', function() {
-    setTimeout(resize, 300);
-  });
-
-  resize();
-</script>
+    resize();
+  </script>
 </body>
+
 </html>
