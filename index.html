@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎯 Food Stall Lucky Wheel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a0533 0%, #2d1060 40%, #0d2b5e 100%);
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Floating particles */
+    .particles {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.15;
+      animation: float linear infinite;
+    }
+
+    @keyframes float {
+      0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.2; }
+      90%  { opacity: 0.2; }
+      100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* Header */
+    .header {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .header h1 {
+      font-family: 'Baloo 2', cursive;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      color: #fff;
+      text-shadow: 0 0 30px rgba(255,200,0,0.7), 0 2px 8px rgba(0,0,0,0.5);
+      letter-spacing: 1px;
+    }
+    .header p {
+      color: #d4b8ff;
+      font-size: clamp(0.8rem, 2vw, 1rem);
+      margin-top: 4px;
+      font-weight: 600;
+    }
+    .badge {
+      display: inline-block;
+      background: linear-gradient(90deg, #ff6b35, #f7c59f);
+      color: #1a0533;
+      font-weight: 700;
+      font-size: 0.75rem;
+      padding: 3px 12px;
+      border-radius: 20px;
+      margin-top: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    /* Wheel container */
+    .wheel-area {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .wheel-wrapper {
+      position: relative;
+      width: clamp(300px, 70vw, 500px);
+      height: clamp(300px, 70vw, 500px);
+    }
+
+    /* Pointer/Arrow */
+    .pointer {
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 18px solid transparent;
+      border-right: 18px solid transparent;
+      border-top: 50px solid #ffd700;
+      filter: drop-shadow(0 4px 10px rgba(255,215,0,0.8));
+      z-index: 10;
+    }
+    .pointer::after {
+      content: '';
+      position: absolute;
+      top: -54px;
+      left: -10px;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(255,215,0,0.8);
+    }
+
+    canvas#wheelCanvas {
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 8px rgba(255,255,255,0.15),
+        0 0 0 12px rgba(255,215,0,0.3),
+        0 0 60px rgba(180,100,255,0.4),
+        0 10px 40px rgba(0,0,0,0.6);
+      display: block;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    canvas#wheelCanvas:hover {
+      transform: scale(1.01);
+    }
+
+    /* Center hub */
+    .hub {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle, #fff 30%, #ffd700 70%, #ff8c00 100%);
+      border-radius: 50%;
+      border: 4px solid #fff;
+      box-shadow: 0 0 20px rgba(255,215,0,0.9), 0 0 40px rgba(255,140,0,0.5);
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+
+    /* Spin Button */
+    .spin-btn {
+      margin-top: 28px;
+      padding: 16px 52px;
+      font-family: 'Baloo 2', cursive;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #1a0533;
+      background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 6px 25px rgba(255,165,0,0.6), 0 0 0 4px rgba(255,215,0,0.2);
+      transition: all 0.2s;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+    }
+    .spin-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 60%);
+      border-radius: 50px;
+    }
+    .spin-btn:hover:not(:disabled) {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 10px 35px rgba(255,165,0,0.8), 0 0 0 6px rgba(255,215,0,0.3);
+    }
+    .spin-btn:active:not(:disabled) { transform: scale(0.98); }
+    .spin-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Result Overlay */
+    .result-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(6px);
+    }
+    .result-overlay.show { display: flex; }
+
+    .result-card {
+      background: linear-gradient(145deg, #1e0545, #0d2558);
+      border: 2px solid rgba(255,215,0,0.4);
+      border-radius: 28px;
+      padding: 40px 50px;
+      text-align: center;
+      box-shadow: 0 20px 80px rgba(0,0,0,0.7), 0 0 60px rgba(180,80,255,0.3);
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      max-width: 420px;
+      width: 90%;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.5) rotate(-10deg); opacity: 0; }
+      to   { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    .result-emoji { font-size: 5rem; margin-bottom: 10px; }
+    .result-title {
+      font-family: 'Baloo 2', cursive;
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .result-msg {
+      font-size: 1rem;
+      color: #c8a8ff;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .result-win .result-title { color: #ffd700; text-shadow: 0 0 20px rgba(255,215,0,0.7); }
+    .result-lose .result-title { color: #ff6b6b; }
+
+    .close-btn {
+      padding: 12px 36px;
+      background: linear-gradient(135deg, #a855f7, #7c3aed);
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(168,85,247,0.5);
+      transition: all 0.2s;
+    }
+    .close-btn:hover { transform: scale(1.05); box-shadow: 0 6px 25px rgba(168,85,247,0.7); }
+
+    /* Confetti */
+    .confetti-piece {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      top: -20px;
+      animation: confettiFall linear forwards;
+      z-index: 200;
+      pointer-events: none;
+    }
+    @keyframes confettiFall {
+      to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* Stats */
+    .stats {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .stat-box {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      padding: 10px 22px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+    .stat-num {
+      font-family: 'Baloo 2', cursive;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #ffd700;
+    }
+    .stat-label {
+      font-size: 0.7rem;
+      color: #b49ee0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .spin-btn { padding: 14px 36px; font-size: 1.2rem; }
+      .result-card { padding: 28px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Particles -->
+<div class="particles" id="particles"></div>
+
+<!-- Header -->
+<div class="header">
+  <h1>🎯 Lucky Spin Wheel</h1>
+  <p>Food Stall Competition — Try Your Luck!</p>
+  <span class="badge">🍹 3 in 8 Chance to Win Free Sharbat!</span>
+</div>
+
+<!-- Wheel -->
+<div class="wheel-area">
+  <div class="wheel-wrapper">
+    <div class="pointer"></div>
+    <canvas id="wheelCanvas"></canvas>
+    <div class="hub">🎯</div>
+  </div>
+
+  <button class="spin-btn" id="spinBtn" onclick="spin()">🎰 SPIN!</button>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-box">
+      <div class="stat-num" id="totalSpins">0</div>
+      <div class="stat-label">Total Spins</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" id="totalWins">0</div>
+      <div class="stat-label">🍹 Won</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" id="totalLoss">0</div>
+      <div class="stat-label">😔 Nothing</div>
+    </div>
+  </div>
+</div>
+
+<!-- Result Overlay -->
+<div class="result-overlay" id="resultOverlay">
+  <div class="result-card" id="resultCard">
+    <div class="result-emoji" id="resultEmoji"></div>
+    <div class="result-title" id="resultTitle"></div>
+    <div class="result-msg" id="resultMsg"></div>
+    <button class="close-btn" onclick="closeResult()">🔄 Spin Again</button>
+  </div>
+</div>
+
+<script>
+  // Wheel Config
+  const SEGMENTS = [
+    { label: "Nothing",      color: "#3b1f6e", textColor: "#c8a8ff" },
+    { label: "Free\nSharbat!", color: "#ff6b35", textColor: "#fff"   },
+    { label: "Nothing",      color: "#2d1060", textColor: "#c8a8ff" },
+    { label: "Free\nSharbat!", color: "#e05b20", textColor: "#fff"   },
+    { label: "Nothing",      color: "#3b1f6e", textColor: "#c8a8ff" },
+    { label: "Free\nSharbat!", color: "#ff6b35", textColor: "#fff"   },
+    { label: "Nothing",      color: "#2d1060", textColor: "#c8a8ff" },
+    { label: "Nothing",      color: "#3b1f6e", textColor: "#c8a8ff" },
+  ];
+
+  const NUM = SEGMENTS.length;
+  const ARC = (2 * Math.PI) / NUM;
+
+  const canvas = document.getElementById('wheelCanvas');
+  const ctx    = canvas.getContext('2d');
+
+  let size;
+  let currentAngle = 0;
+  let spinning = false;
+  let totalSpins = 0, totalWins = 0, totalLoss = 0;
+
+  function resize() {
+    const maxSize = Math.min(window.innerWidth * 0.78, 500);
+    size = Math.max(300, maxSize);
+    canvas.width = canvas.height = size;
+    drawWheel(currentAngle);
+  }
+  window.addEventListener('resize', resize);
+
+  function drawWheel(angle) {
+    const cx = size / 2, cy = size / 2, r = size / 2 - 6;
+    ctx.clearRect(0, 0, size, size);
+
+    const glow = ctx.createRadialGradient(cx, cy, r * 0.85, cx, cy, r);
+    glow.addColorStop(0, 'rgba(255,215,0,0)');
+    glow.addColorStop(1, 'rgba(255,215,0,0.15)');
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+    ctx.fillStyle = glow;
+    ctx.fill();
+
+    SEGMENTS.forEach((seg, i) => {
+      const startAngle = angle + i * ARC;
+      const endAngle   = startAngle + ARC;
+      const midAngle   = startAngle + ARC / 2;
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, r, startAngle, endAngle);
+      ctx.closePath();
+      ctx.fillStyle = seg.color;
+      ctx.fill();
+
+      if (seg.label.includes('Sharbat')) {
+        const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+        grad.addColorStop(0, 'rgba(255,200,100,0.35)');
+        grad.addColorStop(1, 'rgba(255,100,30,0.1)');
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, startAngle, endAngle);
+        ctx.closePath();
+        ctx.fillStyle = grad;
+        ctx.fill();
+      }
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, r, startAngle, endAngle);
+      ctx.closePath();
+      ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      if (seg.label.includes('Sharbat')) {
+        const iconR = r * 0.82;
+        const ix = cx + iconR * Math.cos(midAngle);
+        const iy = cy + iconR * Math.sin(midAngle);
+        ctx.font = size * 0.055 + 'px serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🍹', ix, iy);
+      }
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(midAngle);
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      const lines = seg.label.split('\n');
+      const fontSize = seg.label.includes('Sharbat')
+        ? Math.max(13, size * 0.038)
+        : Math.max(12, size * 0.034);
+
+      ctx.font = 'bold ' + fontSize + 'px Poppins, sans-serif';
+      ctx.fillStyle = seg.textColor;
+      ctx.shadowColor = 'rgba(0,0,0,0.6)';
+      ctx.shadowBlur = 4;
+
+      const textR = r * 0.58;
+      lines.forEach((line, li) => {
+        const lineOffset = (li - (lines.length - 1) / 2) * (fontSize + 3);
+        ctx.fillText(line, textR, lineOffset);
+      });
+
+      ctx.restore();
+    });
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+    ctx.strokeStyle = 'rgba(255,215,0,0.5)';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+  }
+
+  function spin() {
+    if (spinning) return;
+    spinning = true;
+    document.getElementById('spinBtn').disabled = true;
+
+    const isWin = Math.random() < (3 / 8);
+
+    let targetIndex;
+    if (isWin) {
+      const sharbatIndices = [1, 3, 5];
+      targetIndex = sharbatIndices[Math.floor(Math.random() * sharbatIndices.length)];
+    } else {
+      const nothingIndices = [0, 2, 4, 6, 7];
+      targetIndex = nothingIndices[Math.floor(Math.random() * nothingIndices.length)];
+    }
+
+    const targetMid = (targetIndex + 0.5) * ARC;
+    const pointer   = -Math.PI / 2;
+    const jitter = (Math.random() - 0.5) * ARC * 0.6;
+    const needed = ((pointer - currentAngle - targetMid - jitter) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+    const extraSpins = (6 + Math.floor(Math.random() * 4)) * 2 * Math.PI;
+    const totalRotation = extraSpins + needed;
+
+    const duration = 5000 + Math.random() * 1500;
+    const startTime = performance.now();
+    const startAngle = currentAngle;
+
+    function easeOut(t) {
+      return 1 - Math.pow(1 - t, 4);
+    }
+
+    function animate(now) {
+      const elapsed = now - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      currentAngle = startAngle + easeOut(t) * totalRotation;
+      drawWheel(currentAngle);
+
+      if (t < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        currentAngle = startAngle + totalRotation;
+        drawWheel(currentAngle);
+        spinning = false;
+        document.getElementById('spinBtn').disabled = false;
+        totalSpins++;
+        showResult(isWin);
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  function showResult(isWin) {
+    const overlay = document.getElementById('resultOverlay');
+    const card    = document.getElementById('resultCard');
+
+    if (isWin) {
+      totalWins++;
+      document.getElementById('resultEmoji').textContent = '🍹';
+      document.getElementById('resultTitle').textContent = 'Free Sharbat!';
+      document.getElementById('resultMsg').textContent =
+        'Congratulations! You are the lucky winner! Come collect your free refreshing Sharbat!';
+      card.className = 'result-card result-win';
+      launchConfetti();
+    } else {
+      totalLoss++;
+      document.getElementById('resultEmoji').textContent = '😔';
+      document.getElementById('resultTitle').textContent = 'Nothing This Time!';
+      document.getElementById('resultMsg').textContent =
+        'Better luck next time! Maybe the next spin is your lucky one.';
+      card.className = 'result-card result-lose';
+    }
+
+    updateStats();
+    overlay.classList.add('show');
+  }
+
+  function closeResult() {
+    document.getElementById('resultOverlay').classList.remove('show');
+  }
+
+  function updateStats() {
+    document.getElementById('totalSpins').textContent = totalSpins;
+    document.getElementById('totalWins').textContent  = totalWins;
+    document.getElementById('totalLoss').textContent  = totalLoss;
+  }
+
+  function launchConfetti() {
+    const colors = ['#ffd700','#ff6b35','#a855f7','#22d3ee','#f43f5e','#4ade80'];
+    for (let i = 0; i < 80; i++) {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      const s = 6 + Math.random() * 10;
+      el.style.left = (Math.random() * 100) + 'vw';
+      el.style.background = colors[Math.floor(Math.random() * colors.length)];
+      el.style.width = s + 'px';
+      el.style.height = s + 'px';
+      el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      el.style.animationDuration = (2 + Math.random() * 3) + 's';
+      el.style.animationDelay = (Math.random() * 0.8) + 's';
+      document.body.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }
+  }
+
+  (function createParticles() {
+    const container = document.getElementById('particles');
+    const colors = ['#a855f7','#ffd700','#ff6b35','#22d3ee'];
+    for (let i = 0; i < 20; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const s = 6 + Math.random() * 20;
+      p.style.width = s + 'px';
+      p.style.height = s + 'px';
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+      p.style.left = (Math.random() * 100) + '%';
+      p.style.animationDuration = (8 + Math.random() * 12) + 's';
+      p.style.animationDelay = (Math.random() * 8) + 's';
+      container.appendChild(p);
+    }
+  })();
+
+  resize();
+</script>
+</body>
+</html>
