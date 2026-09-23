@@ -363,7 +363,7 @@
 <div class="header">
   <h1>🎯 Lucky Spin Wheel</h1>
   <p>Food Stall Competition — Try Your Luck!</p>
-  <span class="badge">🍹 3 in 8 Chance to Win Free Sharbat!</span>
+  <span class="badge">🍹 Guaranteed 1 Free Sharbat every 8 Spins!</span>
 </div>
 
 <!-- Wheel -->
@@ -409,9 +409,9 @@
     { label: "Nothing",      color: "#3b1f6e", textColor: "#c8a8ff" },
     { label: "Free\nSharbat!", color: "#ff6b35", textColor: "#fff"   },
     { label: "Nothing",      color: "#2d1060", textColor: "#c8a8ff" },
-    { label: "Free\nSharbat!", color: "#e05b20", textColor: "#fff"   },
     { label: "Nothing",      color: "#3b1f6e", textColor: "#c8a8ff" },
-    { label: "Free\nSharbat!", color: "#ff6b35", textColor: "#fff"   },
+    { label: "Nothing",      color: "#2d1060", textColor: "#c8a8ff" },
+    { label: "Nothing",      color: "#3b1f6e", textColor: "#c8a8ff" },
     { label: "Nothing",      color: "#2d1060", textColor: "#c8a8ff" },
     { label: "Nothing",      color: "#3b1f6e", textColor: "#c8a8ff" },
   ];
@@ -426,6 +426,24 @@
   let currentAngle = 0;
   let spinning = false;
   let totalSpins = 0, totalWins = 0, totalLoss = 0;
+
+  // ── Guaranteed deck: exactly 1 win per 8 spins ──────────────────────────────
+  // Deck = [true, false, false, false, false, false, false, false] shuffled
+  let deck = [];
+  function buildDeck() {
+    deck = [true, false, false, false, false, false, false, false];
+    // Fisher-Yates shuffle
+    for (let i = deck.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [deck[i], deck[j]] = [deck[j], deck[i]];
+    }
+  }
+  buildDeck(); // initialise on load
+
+  function drawFromDeck() {
+    if (deck.length === 0) buildDeck(); // reset every 8 spins
+    return deck.pop();
+  }
 
   function resize() {
     const maxSize = Math.min(window.innerWidth * 0.78, 500);
@@ -526,14 +544,14 @@
     spinning = true;
     document.getElementById('spinBtn').disabled = true;
 
-    const isWin = Math.random() < (3 / 8);
+    // Draw guaranteed result from shuffled deck
+    const isWin = drawFromDeck();
 
     let targetIndex;
     if (isWin) {
-      const sharbatIndices = [1, 3, 5];
-      targetIndex = sharbatIndices[Math.floor(Math.random() * sharbatIndices.length)];
+      targetIndex = 1; // the single Sharbat segment
     } else {
-      const nothingIndices = [0, 2, 4, 6, 7];
+      const nothingIndices = [0, 2, 3, 4, 5, 6, 7];
       targetIndex = nothingIndices[Math.floor(Math.random() * nothingIndices.length)];
     }
 
